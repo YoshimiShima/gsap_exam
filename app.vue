@@ -4,26 +4,31 @@ import { gsap } from 'gsap';
 import { useDraggable } from '@vueuse/core'
 
 const el = ref<HTMLElement | null>(null)
-const { x, y, style, isDragging } = useDraggable(el, {
+const { position, style } = useDraggable(el, {
   initialValue: { x: 200, y: 200 },
 })
 
-const handleClick = () => {
-  // if (!isDragging.value) {
-    gsap.to(el,{
-      x: 200,
-      y: 200,
-      ease: 'back',
-      duration: 0.5,
-    });
+const initialPosition = { x: 200, y: 200 }
 
-};
+const mouseUp = () => {
+  const { x, y } = position.value
+  if (x === initialPosition.x && y === initialPosition.y) {
+    return
+  }
+  gsap.to(position.value, {
+    x: initialPosition.x,
+    y: initialPosition.y,
+    ease: 'back',
+    duration: 0.5,
+  })
+}
+
 </script>
 
 <template>
 <div class = "image">
-  <div ref="el" :style="style" style="position: fixed" @click="handleClick">
-    <div class="button">{{ Math.round(x) }}, {{ Math.round(y) }}</div>
+  <div ref="el" :style="style" style="position: fixed" @mouseup="mouseUp">
+    <div class="button"></div>
   </div>
 </div>
 

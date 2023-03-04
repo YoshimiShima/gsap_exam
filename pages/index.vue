@@ -5,6 +5,14 @@ const el = ref<HTMLElement | null>(null)
 const { x, y, style } = useDraggable(el, {
   initialValue: { x: 200, y: 200 },
 })
+ { x: 187, y: 120 },
+      { x: 296, y: 29 },
+      { x: 1199, y: 29 },
+      { x: 1324, y: 120 },
+      { x: 1324, y: 644 },
+      { x: 1199, y: 767 },
+      { x: 296, y: 767 },
+      { x: 187, y: 644 }
 
 </script>
 
