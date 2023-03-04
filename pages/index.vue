@@ -36,12 +36,12 @@ const mouseUp = () => {
     return prevDistance < currDistance ? prev : curr
   })
 
-  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 100) {
+  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 80) {
     gsap.to(position.value, {
       x: nearestPoint.x,
       y: nearestPoint.y,
       ease: 'power4.out',
-      duration: 0.5,
+      duration: 0.8,
     })
   }
 }
@@ -54,7 +54,7 @@ watch(position, (newValue, oldValue) => {
     return prevDistance < currDistance ? prev : curr
   })
 
-  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 100) {
+  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 80) {
     position.value.x = nearestPoint.x
     position.value.y = nearestPoint.y
   }
