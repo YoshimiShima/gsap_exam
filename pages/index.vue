@@ -1,45 +1,109 @@
 <script setup lang="ts">
-
 import { gsap } from 'gsap';
 import { useDraggable } from '@vueuse/core'
+import {
+  AppleAlt,
+  ApplePay,
+  MailBulk,
+  Phone,
+  Line,
+  Amazon,
+  StarRegular
+} from '@vicons/fa'
 
 const el = ref<HTMLElement | null>(null)
-const { x, y, position, style } = useDraggable(el, {
+const {position, style } = useDraggable(el, {
   initialValue: { x: 200, y: 200 },
 })
 
-const initialPosition = { x: 200, y: 200 }
+const points = [
+  { x: 87, y: 245 },
+  { x: 276, y: 87 },
+  { x: 924, y: 87 },
+  { x: 1088, y: 245 },
+  { x: 1088, y: 590 },
+  { x: 924, y: 753 },
+  { x: 276, y: 753 },
+  { x: 87, y: 590 },
+]
 
 const mouseUp = () => {
   const { x, y } = position.value
-  if (x === initialPosition.x && y === initialPosition.y) {
-    return
-  }
-  gsap.to(position.value, {
-    x: initialPosition.x,
-    y: initialPosition.y,
-    ease: 'back',
-    duration: 0.5,
+
+  const nearestPoint = points.reduce((prev, curr) => {
+    const prevDistance = Math.sqrt((prev.x - x) ** 2 + (prev.y - y) ** 2)
+    const currDistance = Math.sqrt((curr.x - x) ** 2 + (curr.y - y) ** 2)
+    return prevDistance < currDistance ? prev : curr
   })
+
+  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 80) {
+    gsap.to(position.value, {
+      x: nearestPoint.x,
+      y: nearestPoint.y,
+      ease: 'power4.out',
+      duration: 0.5,
+    })
+  }
+}
+
+watch(position, (newValue, oldValue) => {
+  const { x, y } = newValue
+  const nearestPoint = points.reduce((prev, curr) => {
+    const prevDistance = Math.sqrt((prev.x - x) ** 2 + (prev.y - y) ** 2)
+    const currDistance = Math.sqrt((curr.x - x) ** 2 + (curr.y - y) ** 2)
+    return prevDistance < currDistance ? prev : curr
+  })
+
+  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 80) {
+    position.value.x = nearestPoint.x
+    position.value.y = nearestPoint.y
+  }
+});
+
+const menuBox = ref(null)
+const onDoubleClickMethod = (event) => {
+  if(event.detail === 2) {
+    const menuBoxElement = menuBox.value
+    if (menuBoxElement) {
+      menuBoxElement.style.visibility = 'visible'
+    }
+  }
+}
+const close = () => {
+  const menuBoxElement = menuBox.value
+  if (menuBoxElement) {
+    menuBoxElement.style.visibility = 'hidden'
+  }
 }
 
 </script>
 
-<template>
-<div class = "image">
-  <div ref="el" :style="style" style="position: fixed" @mouseup="mouseUp">
-    <div class="button">{{ Math.round(position.value.x) }}, {{ Math.round(position.value.y) }}</div>
-  </div>
-</div>
-
+<template lang="pug">
+.box
+  .screen
+    div(ref='el', :style='style', style='position: fixed', @mouseup='mouseUp', @mousedown='onDoubleClickMethod')
+      .button
+  .menuBox(ref='menuBox')
+    Phone(width="55px" height="55px")
+    ApplePay(width="55px" height="55px")
+    MailBulk(width="55px" height="55px")
+    Line(width="55px" height="55px")
+    Amazon(width="55px" height="55px")
+    AppleAlt(width="55px" height="55px")
+    .iconButton(@click="close")
+      StarRegular(width="55px" height="55px")
+      span.buttonText Close
 </template>
 
 <style>
-.image {
-  border: 20px groove #0a486c;
-  width: 1200px;
-  height: 800px;
-  margin:0 auto
+.box {
+  border: 80px groove #2f3437;
+  border-radius: 30px;
+  background-color: rgba(29, 29, 27, 0.339);
+  width: 1062px;
+  height: 730px;
+  margin-right: auto;
+  position: relative;
 }
 .button {
   bottom: 20px;
@@ -47,13 +111,12 @@ const mouseUp = () => {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #726d6d6a;
+  background-color: #4a47476a;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
 .button::before {
   content: "";
   width: 40px;
@@ -61,15 +124,29 @@ const mouseUp = () => {
   border-radius: 50%;
   background-color: #fff;
 }
+.menuBox{
+  border: none;
+  border-radius: 40px;
+  background-color: rgba(8, 8, 7, 0.543);
+  width: 400px;
+  height: 360px;
+  position:absolute;
+  margin: 185px 0 0 331px;
+  visibility: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.menuBox > * {
+  flex: 1 0 25%;
+  text-align: center;
+  padding: 10px;
+  font-size: 8px;
+}
+.menuBox svg path{
+  fill: rgb(62, 60, 60);
+}
+
 </style>
-
-// })
-//       { x: 187, y: 120 },
-//       { x: 296, y: 29 },
-//       { x: 1199, y: 29 },
-//       { x: 1324, y: 120 },
-//       { x: 1324, y: 644 },
-//       { x: 1199, y: 767 },
-//       { x: 296, y: 767 },
-//       { x: 187, y: 644 }
-
