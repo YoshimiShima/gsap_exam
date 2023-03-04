@@ -4,50 +4,84 @@ import { gsap } from 'gsap';
 import { useDraggable } from '@vueuse/core'
 
 const el = ref<HTMLElement | null>(null)
-const { position, style } = useDraggable(el, {
+const {position, style } = useDraggable(el, {
   initialValue: { x: 200, y: 200 },
 })
 
-const initialPosition = { x: 200, y: 200 }
+const points = [
+  { x: 87, y: 245 },
+  { x: 276, y: 87 },
+  { x: 924, y: 87 },
+  { x: 1088, y: 245 },
+  { x: 1088, y: 590 },
+  { x: 924, y: 753 },
+  { x: 276, y: 753 },
+  { x: 87, y: 590 },
+]
 
 const mouseUp = () => {
   const { x, y } = position.value
-  if (x === initialPosition.x && y === initialPosition.y) {
-    return
-  }
-  gsap.to(position.value, {
-    x: initialPosition.x,
-    y: initialPosition.y,
-    ease: 'back',
-    duration: 0.5,
+
+  const nearestPoint = points.reduce((prev, curr) => {
+    const prevDistance = Math.sqrt((prev.x - x) ** 2 + (prev.y - y) ** 2)
+    const currDistance = Math.sqrt((curr.x - x) ** 2 + (curr.y - y) ** 2)
+    return prevDistance < currDistance ? prev : curr
   })
+
+  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 80) {
+    gsap.to(position.value, {
+      x: nearestPoint.x,
+      y: nearestPoint.y,
+      ease: 'power4.out',
+      duration: 0.5,
+    })
+  }
 }
+
+watch(position, (newValue, oldValue) => {
+  const { x, y } = newValue
+  const nearestPoint = points.reduce((prev, curr) => {
+    const prevDistance = Math.sqrt((prev.x - x) ** 2 + (prev.y - y) ** 2)
+    const currDistance = Math.sqrt((curr.x - x) ** 2 + (curr.y - y) ** 2)
+    return prevDistance < currDistance ? prev : curr
+  })
+
+  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 80) {
+    position.value.x = nearestPoint.x
+    position.value.y = nearestPoint.y
+  }
+})
 
 </script>
 
 <template>
-<div class = "image">
-  <div ref="el" :style="style" style="position: fixed" @mouseup="mouseUp">
-    <div class="button"></div>
+<div class = "box">
+  <div class = "screen">
+    <div ref="el" :style="style" style="position: fixed" @mouseup="mouseUp">
+      <div class="button"></div>
+    </div>
   </div>
 </div>
 
 </template>
 
 <style>
-.image {
-  border: 20px groove #0a486c;
-  width: 1200px;
-  height: 800px;
-  margin:0 auto
+.box {
+  border: 80px groove #2f3437;
+  border-radius: 30px;
+  background-color: rgba(29, 29, 27, 0.339);
+  width: 1062px;
+  height: 730px;
+  margin-right: auto
 }
+
 .button {
   bottom: 20px;
   right: 20px;
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #726d6d6a;
+  background-color: #4a47476a;
   cursor: pointer;
   display: flex;
   align-items: center;

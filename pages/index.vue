@@ -1,26 +1,34 @@
 <script setup lang="ts">
+
 import { gsap } from 'gsap';
+import { useDraggable } from '@vueuse/core'
 
 const el = ref<HTMLElement | null>(null)
-const { x, y, style } = useDraggable(el, {
+const { x, y, position, style } = useDraggable(el, {
   initialValue: { x: 200, y: 200 },
 })
- { x: 187, y: 120 },
-      { x: 296, y: 29 },
-      { x: 1199, y: 29 },
-      { x: 1324, y: 120 },
-      { x: 1324, y: 644 },
-      { x: 1199, y: 767 },
-      { x: 296, y: 767 },
-      { x: 187, y: 644 }
+
+const initialPosition = { x: 200, y: 200 }
+
+const mouseUp = () => {
+  const { x, y } = position.value
+  if (x === initialPosition.x && y === initialPosition.y) {
+    return
+  }
+  gsap.to(position.value, {
+    x: initialPosition.x,
+    y: initialPosition.y,
+    ease: 'back',
+    duration: 0.5,
+  })
+}
 
 </script>
 
-
 <template>
 <div class = "image">
-  <div ref="el" :style="style" style="position: fixed">
-    <div class="button">{{ Math.round(x) }}, {{ Math.round(y) }}</div>
+  <div ref="el" :style="style" style="position: fixed" @mouseup="mouseUp">
+    <div class="button">{{ Math.round(position.value.x) }}, {{ Math.round(position.value.y) }}</div>
   </div>
 </div>
 
@@ -54,3 +62,14 @@ const { x, y, style } = useDraggable(el, {
   background-color: #fff;
 }
 </style>
+
+// })
+//       { x: 187, y: 120 },
+//       { x: 296, y: 29 },
+//       { x: 1199, y: 29 },
+//       { x: 1324, y: 120 },
+//       { x: 1324, y: 644 },
+//       { x: 1199, y: 767 },
+//       { x: 296, y: 767 },
+//       { x: 187, y: 644 }
+
