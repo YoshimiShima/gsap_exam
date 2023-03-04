@@ -36,7 +36,7 @@ const mouseUp = () => {
     return prevDistance < currDistance ? prev : curr
   })
 
-  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 80) {
+  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 100) {
     gsap.to(position.value, {
       x: nearestPoint.x,
       y: nearestPoint.y,
@@ -54,7 +54,7 @@ watch(position, (newValue, oldValue) => {
     return prevDistance < currDistance ? prev : curr
   })
 
-  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 80) {
+  if (Math.sqrt((nearestPoint.x - x) ** 2 + (nearestPoint.y - y) ** 2) <= 100) {
     position.value.x = nearestPoint.x
     position.value.y = nearestPoint.y
   }
@@ -121,14 +121,14 @@ const close = () => {
     div(ref='el', :style='style', style='position: fixed', @mouseup='mouseUp', @mousedown='onDoubleClickMethod')
       .button
   .menuBox(ref='menuBox')
-    Phone(width="55px" height="55px")
-    ApplePay(width="55px" height="55px")
-    MailBulk(width="55px" height="55px")
-    Line(width="55px" height="55px")
-    Amazon(width="55px" height="55px")
-    AppleAlt(width="55px" height="55px")
+    Phone(width="60px" height="60px")
+    ApplePay(width="60px" height="60px")
+    MailBulk(width="60px" height="60px")
+    Line(width="60px" height="60px")
+    Amazon(width="60px" height="60px")
+    AppleAlt(width="60px" height="60px")
     .iconButton(@click="close")
-      StarRegular(width="55px" height="55px")
+      StarRegular(width="60px" height="60px")
       span.buttonText Close
 </template>
 
@@ -164,7 +164,7 @@ const close = () => {
 .menuBox{
   border: none;
   border-radius: 40px;
-  background-color: rgba(8, 8, 7, 0.543);
+  background-color: rgba(12, 12, 11, 0.659);
   width: 400px;
   height: 360px;
   position:absolute;
@@ -181,9 +181,10 @@ const close = () => {
   text-align: center;
   padding: 10px;
   font-size: 8px;
+  color: #fff;
 }
 .menuBox svg path{
-  fill: rgb(62, 60, 60);
+  fill: rgba(246, 242, 242, 0.902);
 }
 
 </style>
