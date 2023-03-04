@@ -60,20 +60,57 @@ watch(position, (newValue, oldValue) => {
   }
 });
 
+// const menuBox = ref(null)
+// const onDoubleClickMethod = (event) => {
+//   if(event.detail === 2) {
+//     const menuBoxElement = menuBox.value
+//     if (menuBoxElement) {
+//       menuBoxElement.style.visibility = 'visible'
+//     }
+//   }
+// }
+// const close = () => {
+//   const menuBoxElement = menuBox.value
+//   if (menuBoxElement) {
+//     menuBoxElement.style.visibility = 'hidden'
+//   }
+// }
+
 const menuBox = ref(null)
-const onDoubleClickMethod = (event) => {
-  if(event.detail === 2) {
-    const menuBoxElement = menuBox.value
-    if (menuBoxElement) {
-      menuBoxElement.style.visibility = 'visible'
-    }
-  }
-}
-const close = () => {
+const popUp = () => {
   const menuBoxElement = menuBox.value
   if (menuBoxElement) {
-    menuBoxElement.style.visibility = 'hidden'
+    gsap.to(menuBoxElement, {
+      duration: 0.5,
+      opacity: 1,
+      scale: 1,
+      visibility: 'visible'
+    })
   }
+}
+
+const popOut = () => {
+  const menuBoxElement = menuBox.value
+  if (menuBoxElement) {
+    gsap.to(menuBoxElement, {
+      duration: 0.5,
+      opacity: 0,
+      scale: 0.5,
+      onComplete: () => {
+        menuBoxElement.style.visibility = 'hidden'
+      }
+    })
+  }
+}
+
+const onDoubleClickMethod = (event) => {
+  if(event.detail === 2) {
+    popUp()
+  }
+}
+
+const close = () => {
+  popOut()
 }
 
 </script>
