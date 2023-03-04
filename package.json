@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "nuxt": "^3.2.3"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^3.2.3",
+    "@pinia/nuxt": "^0.4.7",
+    "@vueuse/core": "^9.13.0",
+    "@vueuse/nuxt": "^9.13.0",
+    "gsap": "^3.11.4",
+    "pinia": "^2.0.32",
+    "pug": "^3.0.2",
+    "pug-plugin": "^4.9.5",
+    "vite-plugin-pug": "^0.3.2"
+  }
+}
